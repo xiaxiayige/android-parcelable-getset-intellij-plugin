@@ -4,8 +4,13 @@
     <vendor email="xiaxiayige@163.com" url="http://www.github.com/xiaxiayige">xiaxiayige</vendor>
 
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+
+    This Plugin Tools = ( Parcelable + Getter And Setter ).<br>
+
+    Parcelable function source <a href='https://github.com/mcharmas/android-parcelable-intellij-plugin'>android-parcelable-intellij-plugin</a> </br>
+
+    Thank author developed a good plugin.<br>
+
     ]]></description>
 
     <!-- please see https://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
