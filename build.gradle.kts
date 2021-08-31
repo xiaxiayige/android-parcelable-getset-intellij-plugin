@@ -28,6 +28,8 @@ intellij {
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
     setPlugins("java", "android", "Kotlin")
+//    localPath = "C:\\Program Files\\JetBrains\\IntelliJ IDEA Community Edition 2021.2"
+    instrumentCode = false
 }
 
 configure<JavaPluginConvention> {
@@ -51,7 +53,7 @@ tasks {
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
     changeNotes(
         """
-          update changeNotes
+          Support Android Bean Parcelable and Getter Setter 
            
         """.trimIndent()
     )

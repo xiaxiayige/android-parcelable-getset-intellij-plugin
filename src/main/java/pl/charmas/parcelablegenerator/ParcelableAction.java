@@ -17,8 +17,10 @@ package pl.charmas.parcelablegenerator;
 
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.actionSystem.impl.ActionManagerImpl;
+import com.intellij.openapi.application.RunResult;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.*;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.jetbrains.annotations.NotNull;
@@ -35,13 +37,18 @@ public class ParcelableAction extends AnAction {
         dlg.show();
 
         if (dlg.isOK()) {
-            //先清除原先的方法 重新生成，避免自己手动删除修改
-            clearOldMethods(e);
-            //增加生成get set方法
-            AnAction generateGetterAndSetter = ActionManagerImpl.getInstanceEx().getAction("GenerateGetterAndSetter");
-            generateGetterAndSetter.actionPerformed(e);
 
-            generateParcelable(psiClass, dlg.getSelectedFields());
+            clearOldMethods(e);
+
+            RunResult runResult = generateParcelable(psiClass, dlg.getSelectedFields());
+
+            if (!runResult.hasException()) {
+
+                AnAction generateGetterAndSetter = ActionManagerImpl.getInstanceEx().getAction("GenerateGetterAndSetter");
+                generateGetterAndSetter.actionPerformed(e);
+            } else {
+                Messages.showMessageDialog(e.getProject(), "generateParcelable error", "tips", null);
+            }
         }
     }
 
@@ -72,8 +79,8 @@ public class ParcelableAction extends AnAction {
         return PsiTreeUtil.getParentOfType(elementAt, PsiClass.class);
     }
 
-    private void generateParcelable(final PsiClass psiClass, final List<PsiField> fields) {
-        new WriteCommandAction.Simple(psiClass.getProject(), psiClass.getContainingFile()) {
+    private @NotNull RunResult generateParcelable(final PsiClass psiClass, final List<PsiField> fields) {
+        return new WriteCommandAction.Simple(psiClass.getProject(), psiClass.getContainingFile()) {
             @Override
             protected void run() throws Throwable {
                 new CodeGenerator(psiClass, fields).generate();
