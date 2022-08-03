@@ -54,6 +54,8 @@ tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml
     changeNotes(
         """
           Support Android Bean Parcelable and Getter Setter 
+          
+          2022.8.3 update support intellij version 
            
         """.trimIndent()
     )
