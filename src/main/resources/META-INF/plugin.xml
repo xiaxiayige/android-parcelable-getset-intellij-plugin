@@ -1,5 +1,5 @@
 <idea-plugin>
-    <id>com.xiaxiayige.android-parcelable-getset-intellij-plugin</id>
+    <id>com.xiaxiayige.android.parcelablegetset</id>
     <name>ParcelableAndGetSetPlugin</name>
     <vendor email="xiaxiayige@163.com" url="http://www.github.com/xiaxiayige">xiaxiayige</vendor>
 
