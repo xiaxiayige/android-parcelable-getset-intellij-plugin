@@ -1,7 +1,9 @@
+import org.jetbrains.intellij.tasks.PublishPluginTask
+
 plugins {
-    id("org.jetbrains.intellij") version "0.6.5"
-    java
-    kotlin("jvm") version "1.4.31"
+    id("java")
+    id("org.jetbrains.kotlin.jvm") version "1.8.10"
+    id("org.jetbrains.intellij") version "1.14.1"
 }
 
 val pluginGroup: String by project
@@ -16,47 +18,48 @@ repositories {
     mavenCentral()
 }
 
-dependencies {
-    implementation(kotlin("stdlib-jdk8"))
-}
+//dependencies {
+//    implementation(kotlin("stdlib-jdk8"))
+//}
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    setPlugins("java", "android", "Kotlin")
-}
+    version.set("2022.2")
+    type.set("IC")
 
-// See https://github.com/JetBrains/gradle-intellij-plugin/
-intellij {
-    setPlugins("java", "android", "Kotlin")
+    plugins.set(listOf("java", "android", "Kotlin"))
 //    localPath = "C:\\Program Files\\JetBrains\\IntelliJ IDEA Community Edition 2021.2"
-    instrumentCode = false
-}
-
-configure<JavaPluginConvention> {
-    sourceCompatibility = JavaVersion.VERSION_1_8
+//    instrumentCode = false
 }
 
 tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
-    }
-    compileTestKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+    withType<JavaCompile> {
+        sourceCompatibility = "11"
+        targetCompatibility = "11"
     }
 
     patchPluginXml {
-        version(pluginVersion)
-        sinceBuild(pluginSinceBuild)
-        untilBuild(pluginUntilBuild)
+//        version(pluginVersion)
+        version.set(pluginVersion)
+        sinceBuild.set(pluginSinceBuild)
+        untilBuild.set(pluginUntilBuild)
+    }
+
+    publishPlugin {
+        val publishToken = System.getenv("IDEA_PublishToken")
+        token.set(publishToken)
     }
 }
+
+
 tasks.getByName<org.jetbrains.intellij.tasks.PatchPluginXmlTask>("patchPluginXml") {
-    changeNotes(
+    changeNotes.set(
         """
-          Support Android Bean Parcelable and Getter Setter 
-          
-          2022.8.3 update support intellij version 
-           
+          Support Android Bean Parcelable and Getter Setter
+
+          2022.8.3 update support intellij version
+
         """.trimIndent()
     )
+
 }
